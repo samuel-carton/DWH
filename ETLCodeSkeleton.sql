@@ -13,7 +13,7 @@
 -- --------------------------------------------
 
 select 'Extract Members at: ' || to_char(sysdate,'YYYY-MM-DD HH24:MI') as extractTime
-  from dual
+  from dual 
   ;
 
   select 'Row counts before: '
