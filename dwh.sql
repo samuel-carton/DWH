@@ -173,38 +173,29 @@ ALTER TABLE F_Flight2 DROP COLUMN LaunchAerotow;
 ALTER TABLE F_Flight2 DROP COLUMN Launchwinch;
 ALTER TABLE F_Flight2 DROP COLUMN Launchsafelaunch;
 
-SELECT * FROM F_Flight2;
-
 ALTER TABLE MEMBER_PROFILING2
 ADD age int;
 UPDATE MEMBER_PROFILING2
 SET age = ((SYSDATE-dateborn)/365);
 
-SELECT * FROM MEMBER_PROFILING2;
-
 ALTER TABLE MEMBER_PROFILING2
 ADD statut_member VARCHAR2(50);
 UPDATE MEMBER_PROFILING2
-SET statut_member = 'student' WHERE statut = '1' ;
+SET statut_member = 'student' WHERE STUDENT = 'Y' ;
 UPDATE MEMBER_PROFILING2
-SET statut_member = 'pilot' WHERE statut = '2' ;
+SET statut_member = 'pilot' WHERE PILOT = 'Y' ;
 UPDATE MEMBER_PROFILING2
-SET statut_member = 'cat' WHERE statut = '3' ;
+SET statut_member = 'cat' WHERE CAT = 'Y' ;
 UPDATE MEMBER_PROFILING2
-SET statut_member = 'fullcat' WHERE statut = '4' ;
+SET statut_member = 'fullcat' WHERE FULLCAT = 'Y' ;
 
 ALTER TABLE MEMBER_PROFILING2 DROP COLUMN student;
 ALTER TABLE MEMBER_PROFILING2 DROP COLUMN pilot;
 ALTER TABLE MEMBER_PROFILING2 DROP COLUMN cat;
 ALTER TABLE MEMBER_PROFILING2 DROP COLUMN fullcat;
-ALTER TABLE MEMBER_PROFILING2 DROP COLUMN statut;
 
-
-
-
-
-
-
+/*SELECT * FROM F_FLIGHT2;
+SELECT * FROM MEMBER_Profiling2;*/
 
 
 
