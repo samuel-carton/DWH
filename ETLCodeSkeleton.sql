@@ -233,11 +233,10 @@ insert into Member_Extract(
 	CLUB,
   4 
         from taMember    
-    where (Month(dateborn) = Month(SYSDATE) and day(dateborn) = day(SYSDATE))) ;
+    where (EXTRACT(month FROM dateborn) = EXTRACT(month FROM SYSDATE)) and (EXTRACT(day FROM dateborn) = EXTRACT(day FROM SYSDATE))) ;
 
-
-commit
-;
+select * from MEMBER_EXTRACT where TYPEOFCHANGE=4; 
+commit;
 -- --------------------------------------------
 -- post-extract report
 -- --------------------------------------------
