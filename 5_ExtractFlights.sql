@@ -35,7 +35,7 @@ select 'Extract Members at: ' || to_char(sysdate,'YYYY-MM-DD HH24:MI') as extrac
   from dual
   ;
 
-  select 'Row counts before: '
+select 'Row counts before: '
     from dual
 union all
   select 'Rows in extract table before (should be zero)' || to_char(count(*))
@@ -65,12 +65,25 @@ insert into Flight_Extract(
 	STATUSASCAT , 
 	STATUSFULLCAT, 
 	SEX , 
-	CLUB,
-  typeOfChange)
+	CLUB)
     (
-    select *,1
+    select MEMBERNO , 
+	INITIALS , 
+	NAME , 
+	ADDRESS , 
+	ZIPCODE  , 
+	DATEBORN , 
+	DATEJOINED , 
+	DATELEFT , 
+	OWNSPLANEREG , 
+	STATUSSTUDENT , 
+	STATUSPILOT  , 
+	STATUSASCAT , 
+	STATUSFULLCAT, 
+	SEX , 
+	CLUB,1
 			from TAFLIGHTSSG70
-			where id in
+			where (LAUNCHTIME AND PILOT1INIT) in
 			(
 			select ID
 				from TAFLIGHTSSG70
