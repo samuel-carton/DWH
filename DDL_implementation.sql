@@ -24,8 +24,8 @@ create table Member(
 );
 CREATE table Bridge(
 id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-member1_id number,
-member2_id number,
+member1 char(4 byte),
+member2 char(4 byte),
 constraint FK_member1_id foreign key (member1_id) references Member(id),
 constraint FK_member2_id foreign key (member2_id) references Member(id)
 );

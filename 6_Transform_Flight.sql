@@ -1,6 +1,6 @@
 
 create table F_Flight(
-  c_name varchar2 (50 BYTE),
+  c_id number,
   launchtime date,
   landingtime date,
   PlaneRegistration char(3 byte),
@@ -13,15 +13,15 @@ create table F_Flight(
   Launchsafelaunch char(1 byte)
 );
 
-INSERT into F_Flight(c_name, launchtime,landingtime,PlaneRegistration,Pilot1Init,Pilot2Init,cablebreak,crosscountrykm,LaunchAerotow,Launchwinch,Launchsafelaunch)
+INSERT into F_Flight(c_id, launchtime,landingtime,PlaneRegistration,Pilot1Init,Pilot2Init,cablebreak,crosscountrykm,LaunchAerotow,Launchwinch,Launchsafelaunch)
 (
-  Select 'TAFLIGHTSSG70', LAUNCHTIME, LANDINGTIME, PLANEREGISTRATION, PILOT1INIT, PILOT2INIT, CABLEBREAK, CROSSCOUNTRYKM, LAUNCHAEROTOW, LAUNCHWINCH, LAUNCHSELFLAUNCH from Flight_Extract
+  Select 3, LAUNCHTIME, LANDINGTIME, PLANEREGISTRATION, PILOT1INIT, PILOT2INIT, CABLEBREAK, CROSSCOUNTRYKM, LAUNCHAEROTOW, LAUNCHWINCH, LAUNCHSELFLAUNCH from Flight_Extract
   where club = 1
 );
 
-INSERT into F_Flight(c_name, launchtime,landingtime,PlaneRegistration,Pilot1Init,Pilot2Init,cablebreak,crosscountrykm,LaunchAerotow,Launchwinch,Launchsafelaunch)
+INSERT into F_Flight(c_id, launchtime,landingtime,PlaneRegistration,Pilot1Init,Pilot2Init,cablebreak,crosscountrykm,LaunchAerotow,Launchwinch,Launchsafelaunch)
 (
-  Select 'TAFLIGHTSVEJLE', LAUNCHTIME, LANDINGTIME, PLANEREGISTRATION, PILOT1INIT, PILOT2INIT, CABLEBREAK, CROSSCOUNTRYKM, LAUNCHAEROTOW, LAUNCHWINCH, LAUNCHSELFLAUNCH from Flight_Extract
+  Select 2, LAUNCHTIME, LANDINGTIME, PLANEREGISTRATION, PILOT1INIT, PILOT2INIT, CABLEBREAK, CROSSCOUNTRYKM, LAUNCHAEROTOW, LAUNCHWINCH, LAUNCHSELFLAUNCH from Flight_Extract
   where club = 2
 );
 
@@ -29,7 +29,7 @@ INSERT into F_Flight(c_name, launchtime,landingtime,PlaneRegistration,Pilot1Init
 
 
 insert into F_Flight2(
-  c_name ,
+  c_id ,
   launchtime ,
   landingtime ,
   PlaneRegistration ,
