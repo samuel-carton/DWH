@@ -1,4 +1,5 @@
-create table Member_Profiling(
+create table Member_Extract(
+  INITIALS CHAR(4 BYTE),
   memberno NUMBER(6,0),
   name VARCHAR2(50 BYTE),
   zipcode NUMBER(4,0),
@@ -10,7 +11,8 @@ create table Member_Profiling(
   cat CHAR(1 BYTE),
   fullcat CHAR(1 BYTE)
 );
-insert INTO Member_Profiling(
+insert INTO Member_Extract(
+  INITIALS,
   memberno, 
   name ,
   zipcode ,
@@ -23,6 +25,7 @@ insert INTO Member_Profiling(
   fullcat)
   (
 SELECT DISTINCT 
+  INITIALS,
   memberno,
   name,
   ZIPCODE,
@@ -35,21 +38,11 @@ SELECT DISTINCT
   TAMEMBER.STATUSFULLCAT  
   from TAMEMBER
 );
-
-/*SELECT * FROM MEMBER_PROFILING;*/
-
-
-create table Club_Profiling(
-  name VARCHAR2(50 byte),
-  zipcode number(4,0)
-  );
-INSERT into Club_Profiling(name,zipcode)
+INSERT into Club (name,zipcode)
 (
   Select MANE, ZIPCODE from TACLUB
 );
-
-/*SELECT * FROM Club_Profiling;*/
-create table F_Flight(
+create table Flight_Extract(
   c_name varchar2 (50 BYTE),
   launchtime date,
   landingtime date,
@@ -62,21 +55,17 @@ create table F_Flight(
   Launchwinch char(1 byte),
   Launchsafelaunch char(1 byte)
 );
-
-INSERT into F_Flight(c_name, launchtime,landingtime,PlaneRegistration,Pilot1Init,Pilot2Init,cablebreak,crosscountrykm,LaunchAerotow,Launchwinch,Launchsafelaunch)
+INSERT into FLIGHT_EXTRACT(c_name, launchtime,landingtime,PlaneRegistration,Pilot1Init,Pilot2Init,cablebreak,crosscountrykm,LaunchAerotow,Launchwinch,Launchsafelaunch)
 (
   Select 'TAFLIGHTSSG70', LAUNCHTIME, LANDINGTIME, PLANEREGISTRATION, PILOT1INIT, PILOT2INIT, CABLEBREAK, CROSSCOUNTRYKM, LAUNCHAEROTOW, LAUNCHWINCH, TAFLIGHTSSG70.LAUNCHSELFLAUNCH from TAFLIGHTSSG70
 );
-
-INSERT into F_Flight(c_name, launchtime,landingtime,PlaneRegistration,Pilot1Init,Pilot2Init,cablebreak,crosscountrykm,LaunchAerotow,Launchwinch,Launchsafelaunch)
+INSERT into FLIGHT_EXTRACT(c_name, launchtime,landingtime,PlaneRegistration,Pilot1Init,Pilot2Init,cablebreak,crosscountrykm,LaunchAerotow,Launchwinch,Launchsafelaunch)
 (
   Select 'TAFLIGHTSVEJLE', LAUNCHTIME, LANDINGTIME, PLANEREGISTRATION, PILOT1INIT, PILOT2INIT, CABLEBREAK, CROSSCOUNTRYKM, LAUNCHAEROTOW, LAUNCHWINCH, LAUNCHSELFLAUNCH from TAFLIGHTSVEJLE
 );
-
-/*SELECT * FROM F_Flight;*/
-
-
-create table Member_Profiling2(
+create table Member_Extract2(
+  memberid NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  INITIALS CHAR(4 BYTE),
   memberno NUMBER(6,0),
   name VARCHAR2(50 BYTE),
   zipcode NUMBER(4,0),
@@ -88,11 +77,9 @@ create table Member_Profiling2(
   cat CHAR(1 BYTE),
   fullcat CHAR(1 BYTE)
 );
-/*select * from MEMBER_PROFILING2;
-drop table MEMBER_PROFILING2;*/
-
-insert into MEMBER_PROFILING2(
+insert into MEMBER_Extract2(
   memberno,
+  INITIALS,
   name ,
   zipcode ,
   dateborn ,
@@ -102,7 +89,9 @@ insert into MEMBER_PROFILING2(
   pilot ,
   cat ,
   fullcat )
-Select memberno,
+Select 
+  memberno,
+  INITIALS,
   name ,
   zipcode ,
   dateborn ,
@@ -112,7 +101,7 @@ Select memberno,
   pilot ,
   cat ,
   fullcat
-from Member_Profiling 
+from MEMBER_EXTRACT
 where((DATELEFT > DATEJOINED)
   and (DATEJOINED <= SYSDATE) 
   and (DATEJOINED >= DATEBORN)
@@ -120,8 +109,7 @@ where((DATELEFT > DATEJOINED)
   and (DATEBORN <= SYSDATE) 
   and (DATEBORN > '01/01/1920' )
 );
-
-create table F_Flight2(
+create table Flight_Extract2(
   c_name varchar2 (50 BYTE),
   launchtime date,
   landingtime date,
@@ -134,8 +122,7 @@ create table F_Flight2(
   Launchwinch char(1 byte),
   Launchsafelaunch char(1 byte)
 );
-
-insert into F_Flight2(
+insert into Flight_Extract2(
   c_name ,
   launchtime ,
   landingtime ,
@@ -148,7 +135,7 @@ insert into F_Flight2(
   Launchwinch ,
   Launchsafelaunch 
 )
-Select * FROM F_Flight
+Select * FROM FLIGHT_EXTRACT
 where 
 (
 (landingtime>launchtime) and
@@ -157,45 +144,55 @@ and (launchtime>='17/12/1904')
 and (REGEXP_COUNT(LaunchAerotow||Launchwinch||Launchsafelaunch,'Y')=1)
 );
 
-ALTER TABLE F_Flight2
+
+/* -------------------------------Flight_Extract2---------------------------*/
+ALTER TABLE Flight_Extract2
 ADD LaunchMethod int;
 
-UPDATE F_Flight2
+UPDATE Flight_Extract2
 SET LAUNCHMETHOD = '1' WHERE LaunchAerotow = 'Y';
-UPDATE F_Flight2
+UPDATE Flight_Extract2
 SET LAUNCHMETHOD = '2' WHERE Launchwinch = 'Y';
-UPDATE F_Flight2
+UPDATE Flight_Extract2
 SET LAUNCHMETHOD = '3' WHERE Launchsafelaunch = 'Y';
-UPDATE F_Flight2
+UPDATE Flight_Extract2
 SET PILOT2INIT = 'PASS' WHERE PILOT2INIT = ' ';
 
-ALTER TABLE F_Flight2 DROP COLUMN LaunchAerotow;
-ALTER TABLE F_Flight2 DROP COLUMN Launchwinch;
-ALTER TABLE F_Flight2 DROP COLUMN Launchsafelaunch;
+ALTER TABLE Flight_Extract2 DROP COLUMN LaunchAerotow;
+ALTER TABLE Flight_Extract2 DROP COLUMN Launchwinch;
+ALTER TABLE Flight_Extract2 DROP COLUMN Launchsafelaunch;
 
-ALTER TABLE MEMBER_PROFILING2
+/* -------------------------------MEMBER_Extract2---------------------------*/
+ALTER TABLE MEMBER_Extract2
 ADD age int;
-UPDATE MEMBER_PROFILING2
+UPDATE MEMBER_Extract2
 SET age = ((SYSDATE-dateborn)/365);
 
-ALTER TABLE MEMBER_PROFILING2
+ALTER TABLE MEMBER_Extract2
 ADD statut_member VARCHAR2(50);
-UPDATE MEMBER_PROFILING2
+UPDATE MEMBER_Extract2
 SET statut_member = 'student' WHERE STUDENT = 'Y' ;
-UPDATE MEMBER_PROFILING2
+UPDATE MEMBER_Extract2
 SET statut_member = 'pilot' WHERE PILOT = 'Y' ;
-UPDATE MEMBER_PROFILING2
+UPDATE MEMBER_Extract2
 SET statut_member = 'cat' WHERE CAT = 'Y' ;
-UPDATE MEMBER_PROFILING2
+UPDATE MEMBER_Extract2
 SET statut_member = 'fullcat' WHERE FULLCAT = 'Y' ;
 
-ALTER TABLE MEMBER_PROFILING2 DROP COLUMN student;
-ALTER TABLE MEMBER_PROFILING2 DROP COLUMN pilot;
-ALTER TABLE MEMBER_PROFILING2 DROP COLUMN cat;
-ALTER TABLE MEMBER_PROFILING2 DROP COLUMN fullcat;
+ALTER TABLE MEMBER_Extract2 DROP COLUMN student;
+ALTER TABLE MEMBER_Extract2 DROP COLUMN pilot;
+ALTER TABLE MEMBER_Extract2 DROP COLUMN cat;
+ALTER TABLE MEMBER_Extract2 DROP COLUMN fullcat;
 
-/*SELECT * FROM F_FLIGHT2;
-SELECT * FROM MEMBER_Profiling2;*/
+/*DROP TABLE MEMBER_Extract;
+DROP TABLE MEMBER_Extract2;
+DROP TABLE FLIGHT_EXTRACT;
+DROP TABLE FLIGHT_EXTRACT2;*/
+
+
+
+
+
 
 
 
