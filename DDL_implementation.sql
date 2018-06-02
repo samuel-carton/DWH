@@ -45,6 +45,13 @@ create table Flight(
   constraint FK_Landingtime foreign key(Landingtime) references d_date(id)
 );
 
+
+
+INSERT into Club(name,zipcode)
+(
+  Select MANE, ZIPCODE from TACLUB
+);
+
 /*
 DROP TABLE Flight;
 DROP TABLE Bridge;
