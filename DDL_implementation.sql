@@ -19,7 +19,7 @@ create table Member(
   age int,
   valid_to date,
   valid_from date,
-  club_id,
+  club_id number,
   constraint FK_clubM_id foreign key (club_id) references Club(id)
 );
 CREATE table Bridge(

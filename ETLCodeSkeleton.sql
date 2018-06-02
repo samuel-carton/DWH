@@ -13,16 +13,21 @@
 -- --------------------------------------------
 drop table Member_Extract;
 create table Member_Extract(
-  memberno NUMBER(6,0),
-  name VARCHAR2(50 BYTE),
-  zipcode NUMBER(4,0),
-  dateborn date,
-  datejoined date,
-  dateleft date,
-  student CHAR(1 BYTE),
-  pilot CHAR(1 BYTE),
-  cat CHAR(1 BYTE),
-  fullcat CHAR(1 BYTE),
+  "MEMBERNO" NUMBER(6,0) , 
+	"INITIALS" CHAR(4 BYTE) , 
+	"NAME" VARCHAR2(50 BYTE) , 
+	"ADDRESS" VARCHAR2(50 BYTE) , 
+	"ZIPCODE" NUMBER(4,0) , 
+	"DATEBORN" DATE , 
+	"DATEJOINED" DATE , 
+	"DATELEFT" DATE, 
+	"OWNSPLANEREG" CHAR(3 BYTE) , 
+	"STATUSSTUDENT" CHAR(1 BYTE) , 
+	"STATUSPILOT" CHAR(1 BYTE) , 
+	"STATUSASCAT" CHAR(1 BYTE) , 
+	"STATUSFULLCAT" CHAR(1 BYTE) , 
+	"SEX" CHAR(1 BYTE) , 
+	"CLUB" VARCHAR2(50 BYTE) ,
   typeOfChange number
 );
 
@@ -48,31 +53,47 @@ union all
 -- **** here goes the extract of added rows 
 -- **** (i.e. rows from today whose primary key is in the set of (PKs from today minus PKs yesterday)
 insert into Member_Extract(
-  MEMBERNO , 
-	INITIALS , 
-	NAME , 
-	ADDRESS , 
-	ZIPCODE  , 
-	DATEBORN , 
-	DATEJOINED , 
-	DATELEFT , 
-	OWNSPLANEREG , 
-	STATUSSTUDENT , 
-	STATUSPILOT  , 
-	STATUSASCAT , 
-	STATUSFULLCAT, 
-	SEX , 
-	CLUB,
-  typeOfChange)
-    (
-    select *,1
+          MEMBERNO , 
+          INITIALS , 
+          NAME , 
+          ADDRESS , 
+          ZIPCODE  , 
+          DATEBORN , 
+          DATEJOINED , 
+          DATELEFT , 
+          OWNSPLANEREG , 
+          STATUSSTUDENT , 
+          STATUSPILOT  , 
+          STATUSASCAT , 
+          STATUSFULLCAT, 
+          SEX , 
+          CLUB,
+          typeOfChange)
+        (
+        select 
+          MEMBERNO , 
+          INITIALS , 
+          NAME , 
+          ADDRESS , 
+          ZIPCODE  , 
+          DATEBORN , 
+          DATEJOINED , 
+          DATELEFT , 
+          OWNSPLANEREG , 
+          STATUSSTUDENT , 
+          STATUSPILOT  , 
+          STATUSASCAT , 
+          STATUSFULLCAT, 
+          SEX , 
+          CLUB,
+          1
 			from taMember
-			where id in
+			where MEMBERNO in
 			(
-			select ID
+			select MEMBERNO
 				from taMember
 			minus
-				select ID
+				select MEMBERNO
 					from taMemberYesterday
 			));
 
@@ -97,14 +118,29 @@ insert into Member_Extract(
 	SEX , 
 	CLUB,
   typeOfChange)
-    (select *,2
-			from taMember
-			where id in
+    (select MEMBERNO , 
+	INITIALS , 
+	NAME , 
+	ADDRESS , 
+	ZIPCODE  , 
+	DATEBORN , 
+	DATEJOINED , 
+	DATELEFT , 
+	OWNSPLANEREG , 
+	STATUSSTUDENT , 
+	STATUSPILOT  , 
+	STATUSASCAT , 
+	STATUSFULLCAT, 
+	SEX , 
+	CLUB,
+  2
+			from taMemberYesterday
+			where MEMBERNO in
 			(
-				select ID
+				select MEMBERNO
 					from taMemberYesterday
 			minus
-				select ID
+				select MEMBERNO
 					from taMember
 			));
 
@@ -128,17 +164,33 @@ insert into Member_Extract(
 	CLUB,
   typeOfChange)
     (
-		select *,3
+		select 
+    MEMBERNO , 
+	INITIALS , 
+	NAME , 
+	ADDRESS , 
+	ZIPCODE  , 
+	DATEBORN , 
+	DATEJOINED , 
+	DATELEFT , 
+	OWNSPLANEREG , 
+	STATUSSTUDENT , 
+	STATUSPILOT  , 
+	STATUSASCAT , 
+	STATUSFULLCAT, 
+	SEX , 
+	CLUB
+  ,3
 			from (
 				select * from taMember
 			minus
 				select * from taMemberYesterday
 			) changes
-		where not changes.id in
+		where not changes.MEMBERNO in
 		(
-				select ID from taMember
+				select MEMBERNO from taMember
 			minus
-				select ID from taMemberYesterday
+				select MEMBERNO from taMemberYesterday
 		));
 
 	
@@ -163,9 +215,24 @@ insert into Member_Extract(
 	CLUB,
   typeOfChange)
     (   
-    select*,4 
+    select 
+    MEMBERNO , 
+	INITIALS , 
+	NAME , 
+	ADDRESS , 
+	ZIPCODE  , 
+	DATEBORN , 
+	DATEJOINED , 
+	DATELEFT , 
+	OWNSPLANEREG , 
+	STATUSSTUDENT , 
+	STATUSPILOT  , 
+	STATUSASCAT , 
+	STATUSFULLCAT, 
+	SEX , 
+	CLUB,4 
         from taMember    
-    where taMember.dateborn = CURDATE()) ;
+    where taMember.dateborn = SYSDATE) ;
 
 
 commit
@@ -177,10 +244,10 @@ commit
 select 'Rows in extract table after, by operations type'
  from dual
 ;
-select operation
+select typeOfChange
      , count(*)
-from ETLMembersExtract
- group by operation
+from Member_Extract
+ group by typeOfChange
  ;
  
  drop table TaMemberYesterday;
