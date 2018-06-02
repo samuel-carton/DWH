@@ -13,7 +13,7 @@
 -- --------------------------------------------
 
 select 'Extract Members at: ' || to_char(sysdate,'YYYY-MM-DD HH24:MI') as extractTime
-  from dual 
+  from dual
   ;
 
   select 'Row counts before: '
@@ -31,33 +31,74 @@ union all
 
 -- **** here goes the extract of added rows 
 -- **** (i.e. rows from today whose primary key is in the set of (PKs from today minus PKs yesterday)
+		select *
+			from taMember
+			where id in
+			(
+			select ID
+				from taMember
+			minus
+				select ID
+					from taMemberYesterday
+			);
 
 
 -- **** here goes the extract of deleted rows 
 -- **** (i.e. rows from yesterday whose primary key is in the set of (PKs from yesterday minus PKs today)
 
+		select *
+			from taMember
+			where id in
+			(
+				select ID
+					from taMemberYesterday
+			minus
+				select ID
+					from taMember
+			);
+
 -- **** here goes the extract of changed rows 
 -- **** (i.e. (rows from today minus rows from yesterday) - new rows )
-	select (
 	
-		(select column_name          
-			from dba_tab_cols
-			where owner = 'DWH'
-			and table_name = 'TAMEMBER' 
-			; )
-		-
-		(select column_name
-			from dba_tab_cols
-			where owner = 'DWH'
-			and table_name = 'D_MEMBER' 
-			; )
-		-
-		(select * from MEMBER_new
-			; )
-	)
+		select *
+			from (
+				select * from taMember
+			minus
+				select * from taMemberYesterday
+			) changes
+		where not changes.id in
+		(
+				select ID from taMember
+			minus
+				select ID from taMemberYesterday
+		);
+
+	
 		
 -- **** here goes the extract of Members whose age changed (i.e. those who have a birthday today) 
 -- **** (i.e. (rows from today with dateBorn(DDMM) = current date(DDMM) - already extracted PKs)
+        
+    select* 
+        from (select *
+			from (
+				select * from taMember
+			minus
+				select * from taMemberYesterday
+			) changes
+		where not changes.id in
+		(
+				select ID from taMember
+			minus
+				select ID from taMemberYesterday
+		); )
+        
+        where taMember.dateborn = CURDATE() ;
+
+
+
+
+
+
 
 commit
 ;
