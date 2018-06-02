@@ -25,9 +25,7 @@ create table Member(
 CREATE table Bridge(
 id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 member1 char(4 byte),
-member2 char(4 byte),
-constraint FK_member1_id foreign key (member1_id) references Member(id),
-constraint FK_member2_id foreign key (member2_id) references Member(id)
+member2 char(4 byte)
 );
 create table Flight(
   id  NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -44,9 +42,6 @@ create table Flight(
   constraint FK_Launchtime foreign key(Launchtime) references d_date(id),
   constraint FK_Landingtime foreign key(Landingtime) references d_date(id)
 );
-
-
-
 INSERT into Club(name,zipcode)
 (
   Select MANE, ZIPCODE from TACLUB

@@ -13,6 +13,20 @@ create table F_Flight(
   Launchsafelaunch char(1 byte)
 );
 
+create table F_Flight2(
+  c_id number,
+  launchtime date,
+  landingtime date,
+  PlaneRegistration char(3 byte),
+  Pilot1Init char(4 byte),
+  Pilot2Init char(4 byte),
+  cablebreak char(1 byte),
+  crosscountrykm number(4,0),
+  LaunchAerotow char(1 byte),
+  Launchwinch char(1 byte),
+  Launchsafelaunch char(1 byte)
+);
+
 INSERT into F_Flight(c_id, launchtime,landingtime,PlaneRegistration,Pilot1Init,Pilot2Init,cablebreak,crosscountrykm,LaunchAerotow,Launchwinch,Launchsafelaunch)
 (
   Select 3, LAUNCHTIME, LANDINGTIME, PLANEREGISTRATION, PILOT1INIT, PILOT2INIT, CABLEBREAK, CROSSCOUNTRYKM, LAUNCHAEROTOW, LAUNCHWINCH, LAUNCHSELFLAUNCH from Flight_Extract

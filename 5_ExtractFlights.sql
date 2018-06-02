@@ -156,9 +156,10 @@ from Flight_Extract
  ;
  
  
- drop table TAFLIGHTSSG70Yesterday,TAFLIGHTSVEJLEYesterday;
+ drop table TAFLIGHTSSG70Yesterday;
+ drop table TAFLIGHTSVEJLEYesterday;
  
- create table TAFLIGHTSSG70Yesterday(
+create table TAFLIGHTSSG70Yesterday(
   launchtime date,
   landingtime date,
   PlaneRegistration char(3 byte),
@@ -168,11 +169,11 @@ from Flight_Extract
   crosscountrykm number(4,0),
   LaunchAerotow char(1 byte),
   Launchwinch char(1 byte),
-  Launchsafelaunch char(1 byte)
+  Launchselflaunch char(1 byte) 
 );
 
  create table TAFLIGHTSVEJLEYesterday(
-   launchtime date,
+  launchtime date,
   landingtime date,
   PlaneRegistration char(3 byte),
   Pilot1Init char(4 byte),
@@ -181,15 +182,15 @@ from Flight_Extract
   crosscountrykm number(4,0),
   LaunchAerotow char(1 byte),
   Launchwinch char(1 byte),
-  Launchsafelaunch char(1 byte) 
-  )
+  Launchselflaunch char(1 byte) 
+  );
 
  
- insert into TAFLIGHTSSG70Yesterday (launchtime ,landingtime ,PlaneRegistration,Pilot1Init ,Pilot2Init ,cablebreak ,crosscountrykm ,LaunchAerotow ,Launchwinch ,Launchsafelaunch )
- select * from TAFLIGHTSSG70;
+ insert into TAFLIGHTSSG70Yesterday (launchtime ,landingtime ,PlaneRegistration,Pilot1Init ,Pilot2Init ,cablebreak ,crosscountrykm ,LaunchAerotow ,Launchwinch ,Launchselflaunch )
+ (select launchtime ,landingtime ,PlaneRegistration,Pilot1Init ,Pilot2Init ,cablebreak ,crosscountrykm ,LaunchAerotow ,Launchwinch ,Launchselflaunch from TAFLIGHTSSG70);
  
- insert into TAFLIGHTSVEJLEYesterday (launchtime ,landingtime ,PlaneRegistration,Pilot1Init ,Pilot2Init ,cablebreak ,crosscountrykm ,LaunchAerotow ,Launchwinch ,Launchsafelaunch)
- select * from TAFLIGHTSVEJLE;
+ insert into TAFLIGHTSVEJLEYesterday (launchtime ,landingtime ,PlaneRegistration,Pilot1Init ,Pilot2Init ,cablebreak ,crosscountrykm ,LaunchAerotow ,Launchwinch ,Launchselflaunch)
+ (select launchtime ,landingtime ,PlaneRegistration,Pilot1Init ,Pilot2Init ,cablebreak ,crosscountrykm ,LaunchAerotow ,Launchwinch ,Launchselflaunch from TAFLIGHTSVEJLE);
 
 exit;
 
