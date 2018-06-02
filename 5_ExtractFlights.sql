@@ -13,32 +13,6 @@
 -- --------------------------------------------
 
 
- create table TAFLIGHTSSG70Yesterday(
-  launchtime date,
-  landingtime date,
-  PlaneRegistration char(3 byte),
-  Pilot1Init char(4 byte),
-  Pilot2Init char(4 byte),
-  cablebreak char(1 byte),
-  crosscountrykm number(4,0),
-  LaunchAerotow char(1 byte),
-  Launchwinch char(1 byte),
-  Launchsafelaunch char(1 byte)
-);
-
- create table TAFLIGHTSVEJLEYesterday(
-  launchtime date,
-  landingtime date,
-  PlaneRegistration char(3 byte),
-  Pilot1Init char(4 byte),
-  Pilot2Init char(4 byte),
-  cablebreak char(1 byte),
-  crosscountrykm number(4,0),
-  LaunchAerotow char(1 byte),
-  Launchwinch char(1 byte),
-  Launchsafelaunch char(1 byte)
-);
-
 
 drop table Flight_Extract;
 create table Flight_Extract(
@@ -145,6 +119,42 @@ select operation
 from Flight_Extract
  group by operation
  ;
+ 
+ 
+ drop table TAFLIGHTSSG70Yesterday,TAFLIGHTSVEJLEYesterday;
+ 
+ create table TAFLIGHTSSG70Yesterday(
+  launchtime date,
+  landingtime date,
+  PlaneRegistration char(3 byte),
+  Pilot1Init char(4 byte),
+  Pilot2Init char(4 byte),
+  cablebreak char(1 byte),
+  crosscountrykm number(4,0),
+  LaunchAerotow char(1 byte),
+  Launchwinch char(1 byte),
+  Launchsafelaunch char(1 byte)
+);
+
+ create table TAFLIGHTSVEJLEYesterday(
+   launchtime date,
+  landingtime date,
+  PlaneRegistration char(3 byte),
+  Pilot1Init char(4 byte),
+  Pilot2Init char(4 byte),
+  cablebreak char(1 byte),
+  crosscountrykm number(4,0),
+  LaunchAerotow char(1 byte),
+  Launchwinch char(1 byte),
+  Launchsafelaunch char(1 byte) 
+  )
+
+ 
+ insert into TAFLIGHTSSG70Yesterday (launchtime ,landingtime ,PlaneRegistration,Pilot1Init ,Pilot2Init ,cablebreak ,crosscountrykm ,LaunchAerotow ,Launchwinch ,Launchsafelaunch )
+ select * from TAFLIGHTSSG70;
+ 
+ insert into TAFLIGHTSVEJLEYesterday (launchtime ,landingtime ,PlaneRegistration,Pilot1Init ,Pilot2Init ,cablebreak ,crosscountrykm ,LaunchAerotow ,Launchwinch ,Launchsafelaunch)
+ select * from TAFLIGHTSVEJLE;
 
 exit;
 
