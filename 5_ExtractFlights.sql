@@ -25,7 +25,7 @@ create table Flight_Extract(
   crosscountrykm number(4,0),
   LaunchAerotow char(1 byte),
   Launchwinch char(1 byte),
-  Launchsafelaunch char(1 byte),
+  LAUNCHSELFLAUNCH char(1 byte),
   club number
 );
 
@@ -51,75 +51,97 @@ union all
 -- **** here goes the extract of added rows 
 -- **** (i.e. rows from today whose primary key is in the set of (PKs from today minus PKs yesterday)
 insert into Flight_Extract(
-  MEMBERNO , 
-	INITIALS , 
-	NAME , 
-	ADDRESS , 
-	ZIPCODE  , 
-	DATEBORN , 
-	DATEJOINED , 
-	DATELEFT , 
-	OWNSPLANEREG , 
-	STATUSSTUDENT , 
-	STATUSPILOT  , 
-	STATUSASCAT , 
-	STATUSFULLCAT, 
-	SEX , 
-	CLUB)
+  launchtime ,
+  landingtime ,
+  PlaneRegistration,
+  Pilot1Init ,
+  Pilot2Init ,
+  cablebreak ,
+  crosscountrykm ,
+  LaunchAerotow ,
+  Launchwinch,
+  LAUNCHSELFLAUNCH,
+  club
+  )
     (
-    select MEMBERNO , 
-	INITIALS , 
-	NAME , 
-	ADDRESS , 
-	ZIPCODE  , 
-	DATEBORN , 
-	DATEJOINED , 
-	DATELEFT , 
-	OWNSPLANEREG , 
-	STATUSSTUDENT , 
-	STATUSPILOT  , 
-	STATUSASCAT , 
-	STATUSFULLCAT, 
-	SEX , 
-	CLUB,1
+    select  
+	launchtime ,
+  landingtime ,
+  PlaneRegistration,
+  Pilot1Init ,
+  Pilot2Init ,
+  cablebreak ,
+  crosscountrykm ,
+  LaunchAerotow ,
+  Launchwinch,
+  LAUNCHSELFLAUNCH,
+  1
+  
 			from TAFLIGHTSSG70
-			where (LAUNCHTIME AND PILOT1INIT) in
+			where(
+       LAUNCHTIME in
 			(
-			select ID
+			select LAUNCHTIME
 				from TAFLIGHTSSG70
 			minus
-				select ID
+				select LAUNCHTIME
 					from TAFLIGHTSSG70Yesterday
-			));
+			)
+      and
+       pilot1init in
+			(
+			select pilot1init
+				from TAFLIGHTSSG70
+			minus
+				select pilot1init
+					from TAFLIGHTSSG70Yesterday
+			)));
 			
 insert into Flight_Extract(
-  MEMBERNO , 
-	INITIALS , 
-	NAME , 
-	ADDRESS , 
-	ZIPCODE  , 
-	DATEBORN , 
-	DATEJOINED , 
-	DATELEFT , 
-	OWNSPLANEREG , 
-	STATUSSTUDENT , 
-	STATUSPILOT  , 
-	STATUSASCAT , 
-	STATUSFULLCAT, 
-	SEX , 
-	CLUB,
-  typeOfChange)
+  launchtime ,
+  landingtime ,
+  PlaneRegistration,
+  Pilot1Init ,
+  Pilot2Init ,
+  cablebreak ,
+  crosscountrykm ,
+  LaunchAerotow ,
+  Launchwinch,
+  LAUNCHSELFLAUNCH,
+  club
+  )
     (
-    select *,2
+    select  
+	launchtime ,
+  landingtime ,
+  PlaneRegistration,
+  Pilot1Init ,
+  Pilot2Init ,
+  cablebreak ,
+  crosscountrykm ,
+  LaunchAerotow ,
+  Launchwinch,
+  LAUNCHSELFLAUNCH,
+  2
 			from TAFLIGHTSVEJLE
-			where id in
+			where(
+       LAUNCHTIME in
 			(
-			select ID
+			select LAUNCHTIME
 				from TAFLIGHTSVEJLE
 			minus
-				select ID
+				select LAUNCHTIME
 					from TAFLIGHTSVEJLEYesterday
-			));
+			)
+      and
+       pilot1init in
+			(
+			select pilot1init
+				from TAFLIGHTSVEJLE
+			minus
+				select pilot1init
+					from TAFLIGHTSVEJLEYesterday
+			)));
 
 commit
 ;
