@@ -230,9 +230,10 @@ insert into Member_Extract(
 	STATUSASCAT , 
 	STATUSFULLCAT, 
 	SEX , 
-	CLUB,4 
+	CLUB,
+  4 
         from taMember    
-    where taMember.dateborn = SYSDATE) ;
+    where (Month(dateborn) = Month(SYSDATE) and day(dateborn) = day(SYSDATE))) ;
 
 
 commit

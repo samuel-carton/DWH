@@ -4,7 +4,7 @@ set valid_to = SYSDATE
 where MEMBERNO in(
         select MEMBERNO 
         from MEMBER_PROFILING2 
-        where typeOfChange = 2 or typeOfChange = 3);
+        where typeOfChange = 2 or typeOfChange = 3 or typeOfChange = 4);
 
 insert into Member(
   memberno ,
@@ -37,7 +37,7 @@ insert into Member(
   where MEMBERNO in(
         select MEMBERNO 
         from MEMBER_PROFILING2 
-        where typeOfChange = 1 or typeOfChange = 3)
+        where typeOfChange = 1 or typeOfChange = 3 or typeOfChange = 4)
 );
 
 
