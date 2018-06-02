@@ -1,6 +1,11 @@
-declare
-endOfTime date := to_date('9999-12-31','YYYY-MM-DD');
-begin
+
+update Member
+set valid_to = SYSDATE
+where MEMBERNO in(
+        select MEMBERNO 
+        from MEMBER_PROFILING2 
+        where typeOfChange = 2 or typeOfChange = 3);
+
 insert into Member(
   memberno ,
   name ,
@@ -11,8 +16,8 @@ insert into Member(
   statut ,
   age ,
   valid_to ,
-  valid_from 
-  /*club_id*/
+  valid_from,
+  club_id
 
 )
 (
@@ -25,9 +30,17 @@ insert into Member(
   dateleft,
   statut_member,
   age,
-  endOfTime,
-  SYSDATE
+  '31/12/9999',
+  SYSDATE,
+  club_id
   from MEMBER_PROFILING2
-  where(MEMBER_PROFILING2.typeOfChange = 1)
+  where MEMBERNO in(
+        select MEMBERNO 
+        from MEMBER_PROFILING2 
+        where typeOfChange = 1 or typeOfChange = 3)
 );
-end;
+
+
+SELECT * FROM member;
+
+

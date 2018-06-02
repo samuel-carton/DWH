@@ -1,3 +1,6 @@
+drop table Member_Profiling;
+drop table Member_Profiling2;
+
 create table Member_Profiling(
   INITIALS CHAR(4 BYTE),
   memberno NUMBER(6,0),
@@ -10,6 +13,7 @@ create table Member_Profiling(
   pilot CHAR(1 BYTE),
   cat CHAR(1 BYTE),
   fullcat CHAR(1 BYTE),
+  CLUB VARCHAR2(50 BYTE),
   typeOfChange number
 );
 
@@ -25,6 +29,7 @@ insert INTO Member_Profiling(
   pilot,
   cat,
   fullcat,
+  CLUB,
   typeOfChange)
   (
 SELECT DISTINCT 
@@ -39,6 +44,7 @@ SELECT DISTINCT
   STATUSPILOT,
   STATUSASCAT,
   STATUSFULLCAT,
+  CLUB,
   typeOfChange
   from Member_Extract
   where(typeOfChange = 1 or  typeOfChange = 3)
@@ -57,6 +63,7 @@ create table Member_Profiling2(
   pilot CHAR(1 BYTE),
   cat CHAR(1 BYTE),
   fullcat CHAR(1 BYTE),
+  CLUB VARCHAR2(50 BYTE),
   typeOfChange number
 );
 
@@ -71,7 +78,9 @@ insert into MEMBER_PROFILING2(
   student ,
   pilot ,
   cat ,
-  fullcat )
+  fullcat,
+  CLUB,
+  typeOfChange)
 Select 
   memberno,
   INITIALS,
@@ -84,6 +93,7 @@ Select
   pilot ,
   cat ,
   fullcat,
+  CLUB,
   typeOfChange
 from Member_Profiling 
 where((DATELEFT > DATEJOINED)
@@ -115,17 +125,16 @@ ALTER TABLE MEMBER_PROFILING2 DROP COLUMN pilot;
 ALTER TABLE MEMBER_PROFILING2 DROP COLUMN cat;
 ALTER TABLE MEMBER_PROFILING2 DROP COLUMN fullcat;
 
+ALTER TABLE MEMBER_PROFILING2
+ADD club_id number;
 
-
-
-
-Select
-          MEMBERNO 
-          from Member_Extract 
-          where(typeOfChange = 2);
-
-
+UPDATE Member_Profiling2
+SET club_id = 2 WHERE CLUB = 'Vejle';
 
 UPDATE MEMBER_PROFILING2 
-SET age = ((SYSDATE-dateborn)/365)
-where (typeOfChange = 4);
+SET club_id = 3 where CLUB = 'SG70';
+
+ALTER TABLE MEMBER_PROFILING2 DROP COLUMN CLUB;
+
+UPDATE MEMBER_PROFILING2 
+SET age = ((SYSDATE-dateborn)/365) where (typeOfChange = 4);
