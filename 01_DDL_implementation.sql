@@ -38,9 +38,7 @@ create table Flight(
   LaunchMethod varchar2(50),
   club_id NUMBER,
   constraint FK_group_id foreign key(groupid) references Bridge(id),
-  constraint FK_club_id foreign key (club_id) references Club(id),
-  constraint FK_Launchtime foreign key(Launchtime) references d_date(id),
-  constraint FK_Landingtime foreign key(Landingtime) references d_date(id)
+  constraint FK_club_id foreign key (club_id) references Club(id)
 );
 INSERT into Club(name,zipcode)
 (
@@ -91,8 +89,8 @@ CREATE TABLE TaMemberYesterday
     "SEX"           CHAR(1 BYTE) ,
     "CLUB"          VARCHAR2(50 BYTE)
   );
-/*
-DROP TABLE Flight;
+
+/*DROP TABLE Flight;
 DROP TABLE Bridge;
 DROP TABLE Member;
 DROP TABLE Club;
