@@ -42,4 +42,4 @@ INTO Member
       OR typeOfChange    = 4 --or when there is a birthday
       )
   );
-SELECT * FROM member;
+
